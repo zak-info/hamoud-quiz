@@ -8,10 +8,10 @@ import { Alert, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@n
 const Accelieu = ({locale}) => {
   const CurrentLang = { en: "English", fr: "Francais", ar: "عربي" }
   const langs = {
-    choiser:{ar:"اختر الفئة",fr:"Choiser un category "},
-    c1:{ar:"سنة 2000",fr:"annee 2000"},
-    c2:{ar:"سنة 2010",fr:"annee 2010"},
-    c3:{ar:"سنة 2020",fr:"annee 2020"},
+    choiser:{ar:"اختر الفئة",fr:"Choisir une catégorie "},
+    c1:{ar:"سنة 2000",fr:"année  2000"},
+    c2:{ar:"سنة 2010",fr:"année 2010"},
+    c3:{ar:"سنة 2020",fr:"année 2020"},
   }
 
   const [isVisible, setIsVisible] = useState(false);
