@@ -12,6 +12,14 @@ import Lottie from 'lottie-react';
 import { useRouter } from "next/navigation";
 
 export const Annee = ({ annee,locale }) => {
+
+     
+    const answerStatus = { true: { ar: "اجابة صحيحة", fr: "Réponse correcte" }, false: { ar: "اجابة خاطئة", fr: "Réponse incorrecte" } }
+    const anneelangs = { ar: "سنة", fr: "année" }
+    const qlangs = { ar: "س", fr: "Q" }
+
+
+
     const [qs, setQS] = useState({
         2000: {
             q1: {
@@ -33,11 +41,11 @@ export const Annee = ({ annee,locale }) => {
                 ]
             },
             q3: {
-                audio: "/audio/bla7doud.mp3",
+                audio: "/audio/kibzamen.mp3",
                 cost: 20,
                 answers: [
                     { id: 1, title: { fr: "el michwar", ar: "المشوار" }, correct: false },
-                    { id: 2, title: { fr: "bila houdoud", ar: "بلا حدود" }, correct: true },
+                    { id: 2, title: { fr: "kide el zamen ", ar: "كيد الزمن" }, correct: true },
                     { id: 3, title: { fr: "taman el houlem", ar: "ثمن الحلم" }, correct: false }
                 ]
             }
@@ -82,11 +90,11 @@ export const Annee = ({ annee,locale }) => {
                 ]
             },
             q2: {
-                audio: "/audio/babour.mp3",
+                audio: "/audio/a7walnas.mp3",
                 cost: 15,
                 answers: [
                     { id: 1, title: { fr: "liyam", ar: "اليام" }, correct: false },
-                    { id: 2, title: { fr: "babour el louh", ar: "بابور اللوح" }, correct: true },
+                    { id: 2, title: { fr: "a7wal el nasse", ar: " احوال الناس" }, correct: true },
                     { id: 3, title: { fr: "bent el blade", ar: "بنت البلاد" }, correct: false }
                 ]
             },
@@ -113,10 +121,8 @@ export const Annee = ({ annee,locale }) => {
         fail:{ar:"لقد خسرت",fr:"Vous avez perdu"},
         win:{ar:"لقد ربحت",fr:"Vous avez gagné"},
     }
-    
-    const answerStatus = { true: { ar: "اجابة صحيحة", fr: "Réponse correcte" }, false: { ar: "اجابة خاطئة", fr: "Réponse incorrecte" } }
-
-    const [current, setCurrent] = useState("q1")
+   
+    const [current, setCurrent] = useState({value:"q1" ,lable:qlangs[locale]+"1"})
     const [canPass, setCanPass] = useState(false);
     const [final, setFinal] = useState(false);
     const [answers, setAnswers] = useState([]);
@@ -127,9 +133,9 @@ export const Annee = ({ annee,locale }) => {
             ...qs,
             [annee]: {
                 ...qs[annee],
-                [current]: {
-                    ...qs[annee][current],
-                    answers: qs[annee][current].answers.map((a) => {
+                [current.value]: {
+                    ...qs[annee][current.value],
+                    answers: qs[annee][current.value].answers.map((a) => {
                         if (a.id == id) {
                             return { ...a, current: true }
                         }
@@ -138,17 +144,17 @@ export const Annee = ({ annee,locale }) => {
                 }
             }
         })
-        setAnswer(qs[annee][current]?.answers?.find(a => a.id == id))
+        setAnswer(qs[annee][current.value]?.answers?.find(a => a.id == id))
         setCanPass(true);
     }
 
     const NextQst = (id) => {
         if (canPass) {
             let keys = Object.keys(qs[annee])
-            let index = keys.indexOf(current)
+            let index = keys.indexOf(current.value)
 
             if (index < keys.length - 1) {
-                setCurrent(keys[index + 1])
+                setCurrent({value:keys[index + 1],lable:qlangs[locale]+index+1})
                 setAnswers([...answers, { cost: qs[annee][current].cost, correct: answer?.correct }])
                 setAnswer(null)
             } else {
@@ -172,18 +178,18 @@ export const Annee = ({ annee,locale }) => {
             {
                 !final ?
                     <>
-                        <h1 className="text-5xl lg:text-[8rem] font-bold uppercase">{current}</h1>
+                        <h1 className="text-5xl lg:text-[8rem] font-bold uppercase">{current.lable} <span className="text-lg">-{anneelangs[locale]+" "+annee}</span> </h1>
                         <div className="w-full flex flex-col items-center justify-center ">
-                            <Image src={`/images/${current}.png`} width={500} height={500} className='rounded-full !shadow-[0_0.15rem_1.25rem_#000000]  object-cover m-6 w-20 h-20' />
+                            <Image src={`/images/${current.value}.png`} width={500} height={500} className='rounded-full !shadow-[0_0.15rem_1.25rem_#000000]  object-cover m-6 w-20 h-20' />
                             {/* <Typography variant="h6">??</Typography> */}
                             <ReactAudioPlayer
-                                src={qs[annee][current]?.audio} // Replace with your audio file path
+                                src={qs[annee][current.value]?.audio} // Replace with your audio file path
                                 controls
                             />
                         </div>
                         <div className=' w-full lg:w-2/3 mt-12 flex flex-col md:flex-row justify-center items-center gap-6'>
                             {
-                                qs[annee][current]?.answers?.map((answer, index) => (
+                                qs[annee][current.value]?.answers?.map((answer, index) => (
                                     <button key={index} onClick={() => selectAnswer(index + 1)} className={`w-60 flex hover:shadow-lg items-center py-3 bg-white rounded-xl px-4 gap-4 ${answer?.current ? " bg-gradient-to-b from-blue-500 to-blue-400 text-white" : "bg-white text-neutral-700"} `}>
                                         <span className={`w-12 h-12 font-bold text-xl  flex justify-center items-center rounded-full  ${answer?.current ? "bg-white text-blue-500" : "bg-yellow-300/30 text-[#FCD60C]"}`}>
                                             0{index + 1}
