@@ -11,14 +11,15 @@ import fal from "@/public/false.json";
 import Lottie from 'lottie-react';
 import { useRouter } from "next/navigation";
 
-export const Annee = ({ annee,locale }) => {
+export const Annee = ({ annee, locale }) => {
 
-     
+
     const answerStatus = { true: { ar: "اجابة صحيحة", fr: "Réponse correcte" }, false: { ar: "اجابة خاطئة", fr: "Réponse incorrecte" } }
     const anneelangs = { ar: "سنة", fr: "année" }
     const qlangs = { ar: "س", fr: "Q" }
+    const reset = { ar: "رجوع", fr: "reset" }
 
-    
+
     const [qs, setQS] = useState({
         2000: {
             q1: {
@@ -117,10 +118,10 @@ export const Annee = ({ annee,locale }) => {
         wrong: { ar: "اجابة خاطئة", fr: "Réponse incorrecte" },
         total: { ar: "المجموع", fr: "Total" },
         jouer: { ar: "العب مرة أخرى", fr: "Jouer encore" },
-        fail:{ar:"لقد خسرت",fr:"Vous avez perdu"},
-        win:{ar:"لقد ربحت",fr:"Vous avez gagné"},
+        fail: { ar: "لقد خسرت", fr: "Vous avez perdu" },
+        win: { ar: "لقد ربحت", fr: "Vous avez gagné" },
     }
-   
+
     const [current, setCurrent] = useState("q1")
     const [canPass, setCanPass] = useState(false);
     const [final, setFinal] = useState(false);
@@ -175,9 +176,17 @@ export const Annee = ({ annee,locale }) => {
         <div className='relative w-screen h-screen bg-gradient-to-br from-[#FCD60C] to-[#e7c503] flex flex-col justify-center items-center'>
             <Image src={"/images/logo2.png"} width={500} height={500} className='a absolute top-0 left-0 m-6 w-32 h-32  lg:w-40 lg:h-40' />
             {
+                final ?
+                    <a href="/" className=" absolute top-0 right-0 px-6 py-3 me-6 text-xl hover:shadow-sm hover:shadow-white border border-white text-white mt-8 rounded-full">
+                        {reset[locale]}
+                    </a>
+                    :
+                    null
+            }
+            {
                 !final ?
                     <>
-                        <h1 className="text-5xl lg:text-[8rem] font-bold uppercase">{current} <span className="text-lg">-{anneelangs[locale]+" "+annee}</span> </h1>
+                        <h1 className="text-5xl lg:text-[8rem] font-bold uppercase">{current} <span className="text-lg">-{anneelangs[locale] + " " + annee}</span> </h1>
                         <div className="w-full flex flex-col items-center justify-center ">
                             <Image src={`/images/${current}.png`} width={500} height={500} className='rounded-full !shadow-[0_0.15rem_1.25rem_#000000]  object-cover m-6 w-20 h-20' />
                             {/* <Typography variant="h6">??</Typography> */}
@@ -203,7 +212,7 @@ export const Annee = ({ annee,locale }) => {
                         </button>
                     </>
                     :
-                    <div dir={locale == "ar" ? "rtl":"ltr"} className="flex flex-col items-center justify-center">
+                    <div dir={locale == "ar" ? "rtl" : "ltr"} className="flex flex-col items-center justify-center">
                         <Lottie className='w-60 h-60' animationData={answers?.filter(item => item?.correct).length > 1 ? Ani : fal} loop={false} />
                         <motion.div
                             initial={{ opacity: 0 }}
