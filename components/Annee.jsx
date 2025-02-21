@@ -10,6 +10,8 @@ import Ani from "@/public/check.json";
 import fal from "@/public/false.json";
 import Lottie from 'lottie-react';
 import { useRouter } from "next/navigation";
+import { createUnity } from "@/actions/unity.action";
+import CircleTextToggle from "./CircleTextToggle";
 
 export const Annee = ({ annee, locale }) => {
 
@@ -167,10 +169,20 @@ export const Annee = ({ annee, locale }) => {
     }
 
     const router = useRouter()
+    const [postloader, setPostloader] = useState(false);
 
 
-    const JouerEncor = () => {
+    const JouerEncor = async () => {
+        setPostloader(true);
+        try {
+            const points = answers?.filter(item => item?.correct).length;
+            const result = await createUnity({ points, success: points > 1 ? "true" : "false" });
+        } catch (error) {
+            console.error('Error adding course:', error);
+        }
         router.push("/")
+
+
     }
     return (
         <div className='relative w-screen h-screen bg-gradient-to-br from-[#FCD60C] to-[#e7c503] flex flex-col justify-center items-center'>
@@ -229,8 +241,10 @@ export const Annee = ({ annee, locale }) => {
                             }
                             <p className="mt-4 w-60 md:w-96 rounded-xl p-4 bg-white "><span className="text-xl font-bold">{langs?.total[locale]}  :</span> {answers?.filter(item => item?.correct).length} {langs?.point[locale]}</p>
 
-                            <button onClick={JouerEncor} className="px-6 py-3 text-xl hover:shadow-sm hover:shadow-white border border-white text-white mt-8 rounded-full">
-                                {langs.jouer[locale]}
+                            <button onClick={JouerEncor} className="w-40 py-3 text-xl hover:shadow-sm hover:shadow-white border border-white text-white mt-8 rounded-full">
+                                <CircleTextToggle postloader={postloader} text={langs.jouer[locale]} color={"primary"} size={"sm"} />
+
+                                {/* {langs.jouer[locale]} */}
                             </button>
 
                         </motion.div>
