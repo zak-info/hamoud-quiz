@@ -5,7 +5,7 @@ import PieChart from './Statistics/PieChart'
 
 const DayChart = ({data}) => {
     return (
-        <div className='w-screen px-6 lg:px-0 flex flex-col lg:flex-row justify-center gap-6 py-8'>
+        <div className='w-screen px-6 lg:px-0 flex justify-center gap-6 py-8'>
             <div className='w-full flex flex-col lg:flex-row justify-center gap-4'>
                 <motion.span
                     initial={{ opacity: 0, y: 30 }}
